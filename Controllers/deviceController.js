@@ -31,11 +31,31 @@ module.exports.getDevices = function(req, res) {
 
 module.exports.getDeviceByID = function(req, res) {
   const deviceID = req.query.id;
-  deviceModel.findById(deviceID).then(function(device) {
-    if (device) {
-      res.json(device);
-    } else {
-      res.status(404).send("No device found with this ID");
-    }
-  });
+  deviceModel
+    .findById(deviceID)
+    .then(function(device) {
+      if (device) {
+        res.json(device);
+      } else {
+        res.status(404).send("No device found with this ID");
+      }
+    })
+    .catch(function(error) {
+      res.status(404).send(error);
+    });
+};
+
+module.exports.updateDevice = function(req, res) {
+  const deviceID = req.body.deviceID;
+  const newStatus = req.body.status;
+
+  deviceModel
+    .findByIdAndUpdate(deviceID, { status: newStatus })
+    .then(function(device) {
+      if (device) {
+        res.status(200).send("Device Update Successfully");
+      } else {
+        res.status(400).send("Error While Updating Device");
+      }
+    });
 };
