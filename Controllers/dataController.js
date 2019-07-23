@@ -30,7 +30,7 @@ module.exports.getDeviceData = function(req, res) {
     res.status(404).send("Missing ID");
   }
 
-  DataModel.find({ device: deviceID }).sort("-timestamp").limit(40).then(function(data) {
+  DataModel.find({ device: deviceID }).sort("-timestamp").limit(30).then(function(data) {
     if (data) {
       res.status(200).json(data);
     } else {
