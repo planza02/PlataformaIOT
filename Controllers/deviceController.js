@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 const deviceModel = mongoose.model("Device");
+const nodemailer = require("nodemailer");
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.MAIL_ACCOUNT,
+    pass: process.env.MAIL_PASSWORD
+  }
+});
 
 module.exports.createDevice = function(req, res) {
   const name = req.body.name;
@@ -58,4 +67,26 @@ module.exports.updateDevice = function(req, res) {
         res.status(400).send("Error While Updating Device");
       }
     });
+};
+
+module.exports.sendEmail = function(req, res) {
+  const deviceID = req.body.deviceID;
+  const date = new Date();
+  const formattedDate = date.toISOString();
+  const mailOptions = {
+    from: process.env.MAIL_ACCOUNT,
+    to: "pablo.lan.ser@techtalents.club",
+    subject: formattedDate + " || New Alert from Device " + deviceID,
+    html: `<p>The device with ID: ${deviceID} sent you an alert ay ${formattedDate} </p>`
+  };
+
+  transporter.sendMail(mailOptions, function(err, info) {
+    if (err) {
+      console.log(err);
+      res.status(400).json(err);
+    } else {
+      console.log(info);
+      res.status(200).json(info);
+    }
+  });
 };
