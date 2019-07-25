@@ -68,7 +68,7 @@ module.exports.sendEmail = function(req, res) {
   const date = new Date();
   const formattedDate = date.toISOString();
   const msg = {
-    to: "pablolanza892@gmail.com",
+    to: "pablo.lan.ser@techtalents.club",
     from: "KeanuReeves@theMatrix.com",
     subject: `Alert from device: ${deviceID} || Date: ${formattedDate} </p>`,
     text: `Alert from device: ${deviceID} || Date: ${formattedDate} </p>`,
